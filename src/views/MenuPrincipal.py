@@ -1,3 +1,7 @@
+from src.views import MenuRealizarPedido
+from src.views import MenuVisualizarCardapio
+
+
 while True:
     print("\n" + "┌" + "─"*44 + "┐")
     print("│{:^44}│".format("BEM-VINDO AO BURGUER FEI"))
@@ -9,7 +13,6 @@ while True:
     print("│  5) Sair                                   │")
     print("└" + "─"*44 + "┘\n")
 
-
     try:
         option = int(input("Escolha uma opção [1-5]: "))
 
@@ -20,21 +23,17 @@ while True:
         match option:
             case 1:
                 print("---- Entrou no 1 ----")
+                MenuRealizarPedido.main()
             case 2:
                 print("---- Entrou no 2 ----")
             case 3:
                 print("---- Entrou no 3 ----")
             case 4:
                 print("---- Entrou no 4 ----")
+                MenuVisualizarCardapio.main()
             case 5:
                 exit()
 
     except ValueError:
-        print("ERRO Digte um número válido")  # digitou letra, vazio, 3.5, etc.
+        print("ERRO Digte um número válido")
         continue
-
-        
-    
-
-        
-    
