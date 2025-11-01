@@ -5,3 +5,5 @@ class RealizarPedidoController:
         self.service = service
 
     
+    def take_order(self):
+        self.service.take_order()
