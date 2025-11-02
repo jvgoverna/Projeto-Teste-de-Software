@@ -6,17 +6,19 @@ while True:
     print("\n" + "┌" + "─"*44 + "┐")
     print("│{:^44}│".format("BEM-VINDO AO BURGUER FEI"))
     print("├" + "─"*44 + "┤")
-    print("│  1) Realizar pedido                        │")
-    print("│  2) Visualizar pedidos na fila             │")
-    print("│  3) Editar itens no cardápio               │")
-    print("│  4) Visualizar cardápio                    │")
-    print("│  5) Sair                                   │")
+    print("│  1) Realizar pedido                        │") # PEDIDO
+    print("│  2) Visualizar pedidos na fila             │") # MOSTRAR PEDIDOS ATIVOS
+    print("│  3) Editar itens no cardápio               │") # METODOS DO CARDAPIO
+    print("│  4) Visualizar cardápio                    │") # VER CARDAPIO
+    print("│  5) Notas fiscais                          │") # ver notas fiscais
+    print("│  6) Ver historico de pedidos               │") #Historico de pedidos
+    print("│  7) Sair                                   │") # Fechar conexao
     print("└" + "─"*44 + "┘\n")
 
     try:
         option = int(input("Escolha uma opção [1-5]: "))
 
-        if option not in range(1,6):
+        if option not in range(1,8):
             print("ERRO Digite uma opção [1-5]")
             continue
 
