@@ -1,0 +1,458 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API da Lanchonete",
+    "description": "API de POC para gerenciar um card\u00e1pio central, ativa\u00e7\u00e3o de itens por unidade e visualiza\u00e7\u00e3o de dados. Projetada para ser did\u00e1tica e f\u00e1cil de manter.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "infra"
+        ],
+        "summary": "Healthcheck",
+        "description": "VERIFICA SE A APLICA\u00c7\u00c3O EST\u00c1 NO AR\n----------------------------------\nRetorna um JSON simples com `{\"status\": \"ok\"}`.\n\nQuando usar?\n------------\n- Para monitoramento b\u00e1sico (liveness probe).\n- Para checar rapidamente se o servidor subiu.",
+        "operationId": "healthcheck_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/db/ping": {
+      "get": {
+        "tags": [
+          "infra"
+        ],
+        "summary": "Ping Db",
+        "description": "TESTA UMA CONSULTA SIMPLES AO BANCO\n-----------------------------------\nExecuta `SELECT 1` no SQLite para verificar se a conex\u00e3o est\u00e1 viva.\n\nRespostas poss\u00edveis:\n--------------------\n- 200 OK: `{ \"db\": \"connected\", \"path\": \".../lanchonete.db\" }`\n- 500: falha ao consultar o SQLite.",
+        "operationId": "ping_db_db_ping_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/_debug/db/dump": {
+      "get": {
+        "tags": [
+          "infra"
+        ],
+        "summary": "Show All Tables",
+        "description": "MOSTRA O CONTE\u00daDO DE TODAS AS TABELAS (DEBUG)\n---------------------------------------------\nLista todas as tabelas do SQLite (exceto internas) e devolve um dicion\u00e1rio onde\ncada chave \u00e9 o nome da tabela e o valor \u00e9 a lista de registros.\n\nQuando usar?\n------------\n- Durante o desenvolvimento para validar rapidamente o estado do banco.\n- N\u00e3o \u00e9 uma rota de produ\u00e7\u00e3o para sistemas reais (apenas debug).\n\nExemplo de resposta:\n--------------------\n{\n  \"CARDAPIO_CENTRAL\": [\n    {\"id\": 1, \"COMIDA\": \"HAMBURGUER\", \"PRECO\": \"1500\", \"TEMPO_PREPARO\": \"10\"},\n    ...\n  ],\n  \"CARDAPIO_UNIDADE\": []\n}",
+        "operationId": "show_all_tables__debug_db_dump_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cardapio/unidade/itens": {
+      "put": {
+        "tags": [
+          "cardapio"
+        ],
+        "summary": "Atualizar Itens Do Cardapio Da Unidade",
+        "description": "ATUALIZAR ITENS DO CARD\u00c1PIO DA UNIDADE (PARCIAL, LOTE)\n======================================================\n\nObjetivo:\n----------\nAtualizar parcialmente registros de `CARDAPIO_UNIDADE` informando o `id` e os campos a mudar.\n\nRegras:\n--------\n- O corpo deve conter `itens` (lista).\n- Cada item deve ter `id` (int) e pelo menos um dentre: `COMIDA`, `PRECO`, `TEMPO_PREPARO`.\n- Para cada atualiza\u00e7\u00e3o bem-sucedida, o registro atualizado \u00e9 lido e retornado em `itens_atualizados`.\n\nExemplo de requisi\u00e7\u00e3o:\n----------------------\nPUT /cardapio/unidade/itens\n{\n  \"itens\": [\n    { \"id\": 3, \"COMIDA\": \"X-BURGUER_DOBRO\", \"PRECO\": \"1900\" },\n    { \"id\": 5, \"TEMPO_PREPARO\": \"9\" }\n  ]\n}\n\nExemplo de resposta:\n--------------------\n{\n  \"quantidade_de_itens_atualizados\": 2,\n  \"lista_de_erros_durante_atualizacao\": [],\n  \"itens_atualizados\": [\n    {\"id\":3,\"COMIDA\":\"X-BURGUER_DOBRO\",\"PRECO\":\"1900\",\"TEMPO_PREPARO\":\"10\"},\n    {\"id\":5,\"COMIDA\":\"X-SALADA\",\"PRECO\":\"1600\",\"TEMPO_PREPARO\":\"9\"}\n  ]\n}\n\nObserva\u00e7\u00e3o:\n------------\nEsta rota substitui a antiga `/db/unidade/atualizar` para manter consist\u00eancia REST.",
+        "operationId": "atualizar_itens_do_cardapio_da_unidade_cardapio_unidade_itens_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "type": "object",
+                "title": "Corpo Da Requisicao Com Lista De Atualizacoes",
+                "description": "Lista de atualiza\u00e7\u00f5es parciais para registros de CARDAPIO_UNIDADE. Cada item deve ter 'id' (int) e pelo menos um campo entre: COMIDA, PRECO, TEMPO_PREPARO."
+              },
+              "example": {
+                "itens": [
+                  {
+                    "id": 3,
+                    "COMIDA": "X-BURGUER_DOBRO",
+                    "PRECO": "1900"
+                  },
+                  {
+                    "id": 5,
+                    "TEMPO_PREPARO": "9"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "cardapio"
+        ],
+        "summary": "Ativar Itens Do Cardapio Da Unidade",
+        "description": "ATIVAR ITENS DO CARD\u00c1PIO CENTRAL NA UNIDADE (LOTE)\n==================================================\n\nObjetivo:\n----------\nA partir de uma lista de IDs (inteiros) da tabela `CARDAPIO_CENTRAL`, o servidor copia\nos registros correspondentes para a tabela `CARDAPIO_UNIDADE`.  \nIsso representa \u201cativar\u201d itens dispon\u00edveis para venda naquela unidade.\n\nRegras:\n--------\n- O campo `itens` deve existir no corpo JSON e conter uma lista de inteiros.\n- Se um ID n\u00e3o existir no `CARDAPIO_CENTRAL`, um erro ser\u00e1 registrado, mas o processo continua.\n- Nenhum item \u00e9 removido; apenas novos registros s\u00e3o adicionados \u00e0 unidade.\n\nExemplo de requisi\u00e7\u00e3o:\n----------------------\nPOST /cardapio/unidade/itens\n{\n  \"itens\": [1, 2, 4, 6]\n}\n\nExemplo de resposta:\n--------------------\n{\n  \"quantidade_de_itens_ativados\": 3,\n  \"lista_de_erros_durante_ativacao\": [\n    { \"id\": \"6\", \"erro\": \"Item n\u00e3o encontrado no CARDAPIO_CENTRAL\" }\n  ]\n}\n\nObserva\u00e7\u00e3o:\n------------\nEssa rota substitui a antiga `/db/unidade/ativar` para seguir uma conven\u00e7\u00e3o REST mais clara.",
+        "operationId": "ativar_itens_do_cardapio_da_unidade_cardapio_unidade_itens_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "type": "object",
+                "title": "Corpo Da Requisicao Com Lista De Ids",
+                "description": "Corpo JSON contendo a lista de IDs do CARDAPIO_CENTRAL que devem ser copiados/ativados no CARDAPIO_UNIDADE. Ex.: { \"itens\": [1,2,3] }"
+              },
+              "example": {
+                "itens": [
+                  1,
+                  2,
+                  4
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "cardapio"
+        ],
+        "summary": "Remover Itens Do Cardapio Da Unidade",
+        "description": "REMOVER ITENS DO CARD\u00c1PIO DA UNIDADE (LOTE)\n===========================================\n\nObjetivo:\n----------\nRemover, em lote, registros de `CARDAPIO_UNIDADE` informando seus IDs (inteiros).\n\nRegras:\n--------\n- O corpo deve conter `itens` como lista de inteiros.\n- Para cada ID, tenta-se remover; falhas s\u00e3o registradas e o processamento continua.\n\nExemplo de requisi\u00e7\u00e3o (curl):\n-----------------------------\ncurl -X DELETE http://127.0.0.1:8000/cardapio/unidade/itens \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"itens\":[2,4,6]}'\n\nExemplo de resposta:\n--------------------\n{\n  \"quantidade_de_itens_removidos\": 2,\n  \"lista_de_erros_durante_remocao\": [\n    { \"id\": \"6\", \"erro\": \"Falha ao remover do CARDAPIO_UNIDADE: ...\" }\n  ]\n}\n\nObserva\u00e7\u00e3o:\n------------\nEsta rota substitui a antiga `/db/unidade/remover` para seguir conven\u00e7\u00f5es REST mais claras.",
+        "operationId": "remover_itens_do_cardapio_da_unidade_cardapio_unidade_itens_delete",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "type": "object",
+                "title": "Corpo Da Requisicao Com Lista De Ids",
+                "description": "Corpo JSON com a lista de IDs da tabela CARDAPIO_UNIDADE a serem removidos. Ex.: { \"itens\": [1,3,5] }"
+              },
+              "example": {
+                "itens": [
+                  1,
+                  3,
+                  5
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pedidos": {
+      "post": {
+        "tags": [
+          "pedidos"
+        ],
+        "summary": "Adicionar Pedido Formatado Unico",
+        "description": "CRIAR PEDIDO (\u00daNICO) E GERAR NOTA FISCAL\n========================================\n\nObjetivo\n--------\nCriar **um** registro em `PEDIDOS_ATIVOS` (o servidor preenche `HORARIO_ADICIONADO` com epoch seconds)\ne gerar a respectiva nota em `NOTAS_FISCAIS`.\n\nRegras de entrada\n-----------------\nEnvie um JSON com os campos obrigat\u00f3rios:\n- `NUMERO_PEDIDO` (string)\n- `NOME_CLIENTE` (string)\n- `CPF` (string)\n- `COMIDAS` (string agregado, separado por v\u00edrgula)\n- `PRECO` (string com valor em centavos, ex.: \"2100\")\n- `TEMPO_PREPARO` (string; **nesta POC \u00e9 interpretado como segundos**)\n\nComportamento\n-------------\n1) Valida os campos obrigat\u00f3rios.\n2) Insere o pedido em `PEDIDOS_ATIVOS` preenchendo `HORARIO_ADICIONADO` (epoch seconds).\n3) Insere a nota fiscal em `NOTAS_FISCAIS` (`NUMERO_PEDIDO`, `NOME_CLIENTE`, `CPF`, `PRECO`).\n4) Retorna os IDs gerados.\n\nExemplos\n--------\nRequisi\u00e7\u00e3o:\nPOST /pedidos\n{\n  \"NUMERO_PEDIDO\": \"1003\",\n  \"NOME_CLIENTE\": \"Carlos Mendes\",\n  \"CPF\": \"11122233344\",\n  \"COMIDAS\": \"HAMBURGUER, REFRIGERANTE\",\n  \"PRECO\": \"2100\",\n  \"TEMPO_PREPARO\": \"11\"\n}\n\nResposta (201):\n{\n  \"mensagem\": \"Pedido e nota fiscal inseridos com sucesso.\",\n  \"id_pedido_inserido\": 7,\n  \"id_nota_fiscal_inserida\": 7\n}\n\nObserva\u00e7\u00f5es\n-----------\n- Se o pedido for salvo mas a nota fiscal falhar, retornamos 201 com aviso e `erro_nota_fiscal`,\n  para que a emiss\u00e3o da NF possa ser tentada novamente posteriormente.",
+        "operationId": "adicionar_pedido_formatado_unico_pedidos_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Pedido Formatado"
+              },
+              "example": {
+                "NUMERO_PEDIDO": "1003",
+                "NOME_CLIENTE": "Carlos Mendes",
+                "CPF": "11122233344",
+                "COMIDAS": "HAMBURGUER, REFRIGERANTE",
+                "PRECO": "2100",
+                "TEMPO_PREPARO": "11"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pedidos/atualizar-status": {
+      "post": {
+        "tags": [
+          "pedidos"
+        ],
+        "summary": "Atualizar Pedidos Ativos Movendo Para Historico",
+        "description": "ATUALIZAR STATUS DOS PEDIDOS ATIVOS \u2192 MOVER PRONTOS PARA HIST\u00d3RICO\n==================================================================\n\nObjetivo\n--------\nLer todos os registros de `PEDIDOS_ATIVOS`, verificar se o tempo decorrido desde\n`HORARIO_ADICIONADO` j\u00e1 atingiu `TEMPO_PREPARO` (nesta POC, em **segundos**)\ne, quando atingido, mover o pedido para `HISTORICO_PEDIDOS`, removendo-o de `PEDIDOS_ATIVOS`.\n\nRegras (POC)\n------------\n- `TEMPO_PREPARO` \u00e9 tratado como **segundos** (ex.: \"10\" = 10s).\n- `HORARIO_ADICIONADO` \u00e9 salvo como epoch seconds (string) no momento da cria\u00e7\u00e3o do pedido.\n- Em caso de falha ao inserir no hist\u00f3rico, o item **n\u00e3o** \u00e9 removido dos ativos.\n\nRetorno\n-------\n200 OK\n{\n  \"quantidade_movidos_para_historico\": <int>,\n  \"ids_movidos_para_historico\": [<ids de PEDIDOS_ATIVOS>],\n  \"erros\": [\n    {\"id\": \"7\", \"erro\": \"Falha ao remover de PEDIDOS_ATIVOS: ...\"},\n    ...\n  ],\n  \"resumo_ainda_ativos\": [\n    { \"id\": \"8\", \"NUMERO_PEDIDO\": \"1004\", \"faltam_segundos\": \"3\" },\n    ...\n  ]\n}\n\nExemplo\n-------\nRequisi\u00e7\u00e3o:\n  POST /pedidos/atualizar-status\n\nPoss\u00edveis cen\u00e1rios:\n- Se o pedido estiver pronto, ele \u00e9 copiado para `HISTORICO_PEDIDOS` e removido de `PEDIDOS_ATIVOS`.\n- Se ainda n\u00e3o estiver pronto, ele permanece em `PEDIDOS_ATIVOS` e \u00e9 listado em `resumo_ainda_ativos`.",
+        "operationId": "atualizar_pedidos_ativos_movendo_para_historico_pedidos_atualizar_status_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cardapio/central": {
+      "get": {
+        "tags": [
+          "cardapio"
+        ],
+        "summary": "Listar Cardapio Central",
+        "description": "LISTAR CARD\u00c1PIO CENTRAL (CAT\u00c1LOGO GERAL)\n========================================\n\nObjetivo\n--------\nRetornar todos os registros da tabela `CARDAPIO_CENTRAL`, que representa o cat\u00e1logo\ngeral de produtos (seed inicial carregado via JSON).\n\nEstrutura\n----------\n- Tabela: `CARDAPIO_CENTRAL`\n- Colunas: COMIDA, PRECO, TEMPO_PREPARO\n\nExemplo\n--------\nGET /cardapio/central\n\nResposta (200):\n[\n  { \"id\": 1, \"COMIDA\": \"HAMBURGUER\", \"PRECO\": \"1500\", \"TEMPO_PREPARO\": \"10\" },\n  { \"id\": 2, \"COMIDA\": \"BATATA FRITA\", \"PRECO\": \"800\", \"TEMPO_PREPARO\": \"5\" }\n]",
+        "operationId": "listar_cardapio_central_cardapio_central_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cardapio/unidade": {
+      "get": {
+        "tags": [
+          "cardapio"
+        ],
+        "summary": "Listar Cardapio Unidade",
+        "description": "LISTAR CARD\u00c1PIO DA UNIDADE (ITENS ATIVOS)\n=========================================\n\nObjetivo\n--------\nRetornar os itens atualmente ativos e dispon\u00edveis para venda na unidade\n(`CARDAPIO_UNIDADE`).\n\nEstrutura\n----------\n- Tabela: `CARDAPIO_UNIDADE`\n- Colunas: COMIDA, PRECO, TEMPO_PREPARO\n\nExemplo\n--------\nGET /cardapio/unidade\n\nResposta (200):\n[\n  { \"id\": 3, \"COMIDA\": \"X-BURGUER\", \"PRECO\": \"1700\", \"TEMPO_PREPARO\": \"8\" },\n  { \"id\": 4, \"COMIDA\": \"REFRIGERANTE\", \"PRECO\": \"600\", \"TEMPO_PREPARO\": \"1\" }\n]",
+        "operationId": "listar_cardapio_unidade_cardapio_unidade_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pedidos/ativos": {
+      "get": {
+        "tags": [
+          "pedidos"
+        ],
+        "summary": "Listar Pedidos Ativos",
+        "description": "LISTAR PEDIDOS ATIVOS (EM PREPARO)\n==================================\n\nObjetivo\n--------\nRetornar todos os pedidos ainda em preparo ou aguardando conclus\u00e3o,\narmazenados na tabela `PEDIDOS_ATIVOS`.\n\nEstrutura\n----------\n- Tabela: `PEDIDOS_ATIVOS`\n- Colunas: NUMERO_PEDIDO, NOME_CLIENTE, CPF, COMIDAS, PRECO, TEMPO_PREPARO, HORARIO_ADICIONADO\n\nExemplo\n--------\nGET /pedidos/ativos\n\nResposta (200):\n[\n  {\n    \"id\": 1,\n    \"NUMERO_PEDIDO\": \"1001\",\n    \"NOME_CLIENTE\": \"Jo\u00e3o Silva\",\n    \"CPF\": \"11122233344\",\n    \"COMIDAS\": \"X-BURGUER, REFRIGERANTE\",\n    \"PRECO\": \"2100\",\n    \"TEMPO_PREPARO\": \"12\",\n    \"HORARIO_ADICIONADO\": \"1730472103\"\n  }\n]",
+        "operationId": "listar_pedidos_ativos_pedidos_ativos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pedidos/historico": {
+      "get": {
+        "tags": [
+          "pedidos"
+        ],
+        "summary": "Listar Historico Pedidos",
+        "description": "LISTAR HIST\u00d3RICO DE PEDIDOS (CONCLU\u00cdDOS)\n========================================\n\nObjetivo\n--------\nRetornar os pedidos j\u00e1 conclu\u00eddos e movidos de `PEDIDOS_ATIVOS` para `HISTORICO_PEDIDOS`.\n\nEstrutura\n----------\n- Tabela: `HISTORICO_PEDIDOS`\n- Colunas: NUMERO_PEDIDO, NOME_CLIENTE, CPF, COMIDAS, PRECO, TEMPO_PREPARO, HORARIO_ADICIONADO\n\nExemplo\n--------\nGET /pedidos/historico\n\nResposta (200):\n[\n  {\n    \"id\": 5,\n    \"NUMERO_PEDIDO\": \"1002\",\n    \"NOME_CLIENTE\": \"Maria Oliveira\",\n    \"CPF\": \"99988877766\",\n    \"COMIDAS\": \"BATATA FRITA, SUCO\",\n    \"PRECO\": \"1700\",\n    \"TEMPO_PREPARO\": \"6\",\n    \"HORARIO_ADICIONADO\": \"1730471500\"\n  }\n]",
+        "operationId": "listar_historico_pedidos_pedidos_historico_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notas-fiscais": {
+      "get": {
+        "tags": [
+          "pedidos"
+        ],
+        "summary": "Listar Notas Fiscais",
+        "description": "LISTAR NOTAS FISCAIS EMITIDAS\n=============================\n\nObjetivo\n--------\nRetornar todas as notas fiscais registradas em `NOTAS_FISCAIS`,\ncorrespondentes aos pedidos inseridos.\n\nEstrutura\n----------\n- Tabela: `NOTAS_FISCAIS`\n- Colunas: NUMERO_PEDIDO, NOME_CLIENTE, CPF, PRECO\n\nExemplo\n--------\nGET /notas-fiscais\n\nResposta (200):\n[\n  { \"id\": 1, \"NUMERO_PEDIDO\": \"1001\", \"NOME_CLIENTE\": \"Jo\u00e3o Silva\", \"CPF\": \"11122233344\", \"PRECO\": \"2100\" },\n  { \"id\": 2, \"NUMERO_PEDIDO\": \"1002\", \"NOME_CLIENTE\": \"Maria Oliveira\", \"CPF\": \"99988877766\", \"PRECO\": \"1700\" }\n]",
+        "operationId": "listar_notas_fiscais_notas_fiscais_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
