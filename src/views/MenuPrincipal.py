@@ -1,6 +1,7 @@
 from src.views import MenuRealizarPedido
 from src.views import MenuVisualizarCardapio
 from src.views import MenuPedidosFila
+from src.views import MenuVisualizarHistorico
 
 while True:
     print("\n" + "┌" + "─"*44 + "┐")
@@ -10,8 +11,8 @@ while True:
     print("│  2) Visualizar pedidos na fila             │") # MOSTRAR PEDIDOS ATIVOS
     print("│  3) Editar itens no cardápio               │") # METODOS DO CARDAPIO
     print("│  4) Visualizar cardápio                    │") # VER CARDAPIO
-    print("│  5) Notas fiscais                          │") # ver notas fiscais
-    print("│  6) Ver historico de pedidos               │") #Historico de pedidos
+    print("│  5) Ver Notas fiscais                      │") # ver notas fiscais
+    print("│  6) Ver historico de pedidos               │") # Historico de pedidos
     print("│  7) Sair                                   │") # Fechar conexao
     print("└" + "─"*44 + "┘\n")
 
@@ -34,6 +35,11 @@ while True:
             case 4:
                 print("---- Entrou no 4 ----")
                 MenuVisualizarCardapio.main()
+            case 5:
+                print("---- Entrou no 5 ----")
+            case 6:
+                print("---- Entrou no 6 ----")
+                MenuVisualizarHistorico.main()
             case 7:
                 exit()
 

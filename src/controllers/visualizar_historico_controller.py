@@ -1,13 +1,14 @@
-from src.services.pedidos_fila_service import PedidosFilaService
+from src.services.visualizar_historico_service import HistoricoService
 from datetime import datetime
 
-class VisualizarPedidosFilaController:
-    def __init__(self, services: PedidosFilaService):
-        self.services = services
+class VisualizarHistoricoController:
+
+    def __init__(self, service: HistoricoService):
+        self.service = service
 
     def consultar(self):
-        return self.services.listar_pedidos_ativos()
-    
+        return self.service.listar_historico()
+
     @staticmethod
     def horario_formatado(v):
         try:

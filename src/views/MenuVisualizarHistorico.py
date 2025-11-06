@@ -1,16 +1,18 @@
-from src.controllers.visualizar_pedidos_fila_controller import VisualizarPedidosFilaController
-from src.services.pedidos_fila_service import PedidosFilaService
+from src.controllers.visualizar_historico_controller import VisualizarHistoricoController
+from src.services.visualizar_historico_service import HistoricoService
+
 
 def main():
     try:
-        visualizar_ctrl = VisualizarPedidosFilaController(PedidosFilaService())
+        visualizar_ctrl = VisualizarHistoricoController(HistoricoService())
 
         pedidos = visualizar_ctrl.consultar()
 
         if not pedidos:
             print("Não há pedidos em preparo.")
             return
-        else:
+        else:            
+            print(pedidos)
             for i in pedidos:
 
                 horario = visualizar_ctrl.horario_formatado(i.get("HORARIO_ADICIONADO"))
