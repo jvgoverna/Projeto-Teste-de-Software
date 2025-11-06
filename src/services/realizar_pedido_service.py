@@ -10,7 +10,7 @@ class RealizarPedidoService:
                      comidas: list[str], preco_total_reais: float,
                      tempo_preparo_total_min: int) -> dict:
         payload = {
-            "NUMERO_PEDIDO": str(int(numero_pedido) + 1),  # numero_pedido++
+            "NUMERO_PEDIDO": str(int(numero_pedido)),
             "NOME_CLIENTE": nome_cliente,
             "CPF": cpf,
             "COMIDAS": ",".join(comidas),

@@ -1,6 +1,6 @@
 from src.views import MenuRealizarPedido
 from src.views import MenuVisualizarCardapio
-
+from src.views import MenuPedidosFila
 
 while True:
     print("\n" + "┌" + "─"*44 + "┐")
@@ -28,12 +28,13 @@ while True:
                 MenuRealizarPedido.main()
             case 2:
                 print("---- Entrou no 2 ----")
+                MenuPedidosFila.main()
             case 3:
                 print("---- Entrou no 3 ----")
             case 4:
                 print("---- Entrou no 4 ----")
                 MenuVisualizarCardapio.main()
-            case 5:
+            case 7:
                 exit()
 
     except ValueError:
