@@ -2,6 +2,7 @@ from src.views import MenuRealizarPedido
 from src.views import MenuVisualizarCardapio
 from src.views import MenuPedidosFila
 from src.views import MenuVisualizarHistorico
+from src.views import MenuVisualizarNotasFiscais
 
 while True:
     print("\n" + "┌" + "─"*44 + "┐")
@@ -37,6 +38,7 @@ while True:
                 MenuVisualizarCardapio.main()
             case 5:
                 print("---- Entrou no 5 ----")
+                MenuVisualizarNotasFiscais.main()
             case 6:
                 print("---- Entrou no 6 ----")
                 MenuVisualizarHistorico.main()

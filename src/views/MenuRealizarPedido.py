@@ -3,6 +3,7 @@ from src.controllers.visualizar_cardapio_controller import VisualizarCardapioCon
 from src.services.visualizar_cardapio_service import VisualizarCardapioService
 from src.controllers.realizar_pedido_controller import RealizarPedidoController
 from src.services.realizar_pedido_service import RealizarPedidoService
+from itertools import count
 
 from src.utils.formatting import imprimir_titulo, imprimir_linhas, imprimir_rodape
 
@@ -25,6 +26,9 @@ def montar_indices_menu(itens):
             tempos[nome] = 0
         idx_to_nome[i] = nome
     return precos, tempos, idx_to_nome
+
+# contador 1-based em memória
+_pedido_counter = count(1)
 
 def main():
     # 1) Mostrar cardápio
@@ -70,10 +74,10 @@ def main():
     # 5) Enviar para a API
     try:
         resultado = realizar_ctrl.realizar_pedido(
-            numero_pedido=1,
+            numero_pedido=next(_pedido_counter),  # usa o próximo id
             nome_cliente=nome_cliente,
             cpf=cpf,
-            comidas=comidas,  # repetição = quantidade
+            comidas=comidas,
             preco_total_reais=preco_total,
             tempo_preparo_total_min=tempo_total_min,
         )
