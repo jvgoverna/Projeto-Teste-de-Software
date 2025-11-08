@@ -3,6 +3,7 @@ from src.views import MenuVisualizarCardapio
 from src.views import MenuPedidosFila
 from src.views import MenuVisualizarHistorico
 from src.views import MenuVisualizarNotasFiscais
+from src.views import MenuEditarItensCardapio
 
 while True:
     print("\n" + "┌" + "─"*44 + "┐")
@@ -18,7 +19,7 @@ while True:
     print("└" + "─"*44 + "┘\n")
 
     try:
-        option = int(input("Escolha uma opção [1-5]: "))
+        option = int(input("Escolha uma opção [1-7]: "))
 
         if option not in range(1,8):
             print("ERRO Digite uma opção [1-5]")
@@ -33,6 +34,7 @@ while True:
                 MenuPedidosFila.main()
             case 3:
                 print("---- Entrou no 3 ----")
+                MenuEditarItensCardapio.main()
             case 4:
                 print("---- Entrou no 4 ----")
                 MenuVisualizarCardapio.main()

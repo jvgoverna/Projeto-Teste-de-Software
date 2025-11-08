@@ -18,5 +18,22 @@ def imprimir_linhas(itens):
         # Garante que a área interna tenha exatamente LARGURA caracteres
         print("│ " + f"{linha:<{LARGURA-2}}"[:LARGURA-2] + "│")
 
+def imprimir_linhas_cardapio_central(itens):
+    nome_width = 26
+    for idx, item in enumerate(itens, 1):
+        nome = item["COMIDA"]
+
+        try:
+            preco = int(item["PRECO"]) / 100
+        except (TypeError, ValueError):
+            preco = 0.0
+        
+        tempo = item["TEMPO_PREPARO"]
+
+        linha = f"{idx:>2}) {nome:<{nome_width}} R$ {preco:>6.2f}   ({tempo} min)"
+        # Garante que a área interna tenha exatamente LARGURA caracteres
+        print("│ " + f"{linha:<{LARGURA-2}}"[:LARGURA-2] + "│")
+
+
 def imprimir_rodape():
     print("└" + "─" * LARGURA + "┘\n")
