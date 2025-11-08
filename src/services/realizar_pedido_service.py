@@ -15,7 +15,7 @@ class RealizarPedidoService:
             "CPF": cpf,
             "COMIDAS": ",".join(comidas),
             "PRECO": self._reais_para_centavos_str(preco_total_reais),
-            "TEMPO_PREPARO": str(int(tempo_preparo_total_min) * 60),
+            "TEMPO_PREPARO": str(int(tempo_preparo_total_min)),
         }
 
         resp = requests.post(f"{self.BASE_URL}/pedidos", json=payload, timeout=10)
@@ -28,3 +28,9 @@ class RealizarPedidoService:
         resp.raise_for_status()
         data = resp.json()
         return data if isinstance(data, list) else []
+    
+    def atualizar_status_pedidos(self) -> dict:
+        resp = requests.post(f"{self.BASE_URL}/pedidos/atualizar-status", timeout=10)
+        resp.raise_for_status()
+        data = resp.json()
+        return data if isinstance(data, dict) else {}

@@ -52,3 +52,6 @@ class RealizarPedidoController:
             print("\n Entrada interrompida. Finalizando seleção com os itens já adicionados.")
 
         return comidas
+
+    def atualizar_status_pedidos(self) -> dict:
+        return self.service.atualizar_status_pedidos()

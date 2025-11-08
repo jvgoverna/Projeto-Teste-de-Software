@@ -1,4 +1,3 @@
-# ex.: main_pedido.py
 from src.controllers.visualizar_cardapio_controller import VisualizarCardapioController
 from src.services.visualizar_cardapio_service import VisualizarCardapioService
 from src.controllers.realizar_pedido_controller import RealizarPedidoController
@@ -85,6 +84,29 @@ def main():
         print(f"Mensagem: {resultado.get('mensagem', '(sem mensagem)')}")
         print(f"ID pedido inserido: {resultado.get('id_pedido_inserido')}")
         print(f"ID nota fiscal inserida: {resultado.get('id_nota_fiscal_inserida')}")
+
+        # --- ATUALIZAR STATUS DOS PEDIDOS APÓS CRIAR ---
+        try:
+            resumo = realizar_ctrl.atualizar_status_pedidos()
+            print("\n🔄 Status de pedidos atualizado.")
+
+            movidos_qtd = resumo.get("quantidade_movidos_para_historico", 0)
+            movidos_ids = resumo.get("ids_movidos_para_historico", [])
+            erros = resumo.get("erros", [])
+            ainda = resumo.get("resumo_ainda_ativos", [])
+
+            print(f" - Movidos para histórico: {movidos_qtd} (ids: {', '.join(map(str, movidos_ids)) or '—'})")
+            if erros:
+                print(" - Erros durante a atualização:")
+                for e in erros:
+                    print(f"    id={e.get('id')} -> {e.get('erro')}")
+            if ainda:
+                print(" - Ainda ativos (faltam segundos):")
+                for r in ainda:
+                    print(f"    id={r.get('id')} NUMERO_PEDIDO={r.get('NUMERO_PEDIDO')} faltam={r.get('faltam_segundos')}s")
+        except Exception as e:
+            print("⚠️ Não foi possível atualizar o status dos pedidos agora:")
+            print(e)
         
     except Exception as e:
         print("❌ Erro ao criar pedido:")
