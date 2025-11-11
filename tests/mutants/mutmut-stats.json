@@ -1,0 +1,90 @@
+{
+    "tests_by_mangled_function_name": {
+        "codigo.services.editar_itens_cardapio_service.x\u01c1EditarItensCardapioService\u01c1listar_cardapio_unidade": [
+            "tests/integration/test_integration.py::test_remover_comida_especifica_cardapio_unidade",
+            "tests/integration/test_integration.py::test_remover_todos_itens_cardapio_unidade",
+            "tests/integration/test_integration.py::test_ativar_todos_itens_cardapio_unidade",
+            "tests/functional/test_editar_itens_cardapio.py::test_listar_cardapio_unidade",
+            "tests/integration/test_integration.py::test_ativar_itens_repetidos_cardapio_unidade"
+        ],
+        "codigo.services.editar_itens_cardapio_service.x\u01c1EditarItensCardapioService\u01c1listar_cardapio_central": [
+            "tests/functional/test_editar_itens_cardapio.py::test_listar_cardapio_central",
+            "tests/integration/test_integration.py::test_ativar_todos_itens_cardapio_unidade",
+            "tests/integration/test_integration.py::test_ativar_itens_repetidos_cardapio_unidade"
+        ],
+        "codigo.services.editar_itens_cardapio_service.x\u01c1EditarItensCardapioService\u01c1ativar_itens_cardapio_unidade": [
+            "tests/integration/test_integration.py::test_ativar_todos_itens_cardapio_unidade",
+            "tests/functional/test_editar_itens_cardapio.py::test_ativar_itens_cardapio_unidade_ID_invalido",
+            "tests/integration/test_integration.py::test_ativar_itens_repetidos_cardapio_unidade",
+            "tests/functional/test_editar_itens_cardapio.py::test_ativar_itens_cardapio_unidade_lista_vazia",
+            "tests/functional/test_editar_itens_cardapio.py::test_ativar_itens_cardapio_unidade"
+        ],
+        "codigo.services.editar_itens_cardapio_service.x\u01c1EditarItensCardapioService\u01c1remover_itens_cardapio_unidade": [
+            "tests/functional/test_editar_itens_cardapio.py::test_remover_itens_cardapio_unidade",
+            "tests/integration/test_integration.py::test_remover_comida_especifica_cardapio_unidade",
+            "tests/integration/test_integration.py::test_remover_todos_itens_cardapio_unidade",
+            "tests/functional/test_editar_itens_cardapio.py::test_remover_itens_cardapio_unidade_ID_invalido",
+            "tests/functional/test_editar_itens_cardapio.py::test_remover_itens_cardapio_unidade_lista_vazia"
+        ],
+        "codigo.services.pedidos_fila_service.x\u01c1PedidosFilaService\u01c1listar_pedidos_ativos": [
+            "tests/functional/test_pedidos_fila.py::test_listar_pedidos_ativos",
+            "tests/integration/test_integration.py::test_criar_pedido_com_numero_pedido_duplicado",
+            "tests/integration/test_integration.py::test_criar_pedido_com_comidas_vazias",
+            "tests/integration/test_integration.py::test_criar_pedido_mostrar_fila_preparo"
+        ],
+        "codigo.services.realizar_pedido_service.x\u01c1RealizarPedidoService\u01c1criar_pedido": [
+            "tests/functional/test_realizar_pedido.py::test_criar_pedido_resposta_vazia",
+            "tests/integration/test_integration.py::test_criar_pedido_com_comidas_vazias",
+            "tests/integration/test_integration.py::test_criar_pedido_com_numero_pedido_duplicado",
+            "tests/functional/test_realizar_pedido.py::test_criar_pedido",
+            "tests/integration/test_integration.py::test_criar_pedido_mostrar_fila_preparo"
+        ],
+        "codigo.services.realizar_pedido_service.x\u01c1RealizarPedidoService\u01c1atualizar_status_pedidos": [
+            "tests/functional/test_realizar_pedido.py::test_atualizar_status_pedidos"
+        ],
+        "codigo.services.visualizar_cardapio_service.x\u01c1VisualizarCardapioService\u01c1view_menu": [
+            "tests/functional/test_visualizar_cardapio.py::test_view_menu",
+            "tests/functional/test_visualizar_cardapio.py::test_view_menu_preco_zerado"
+        ],
+        "codigo.services.visualizar_historico_service.x\u01c1HistoricoService\u01c1listar_historico": [
+            "tests/integration/test_integration.py::test_listar_historico",
+            "tests/integration/test_integration.py::test_listar_historico_pedidos_notas_fiscais",
+            "tests/functional/test_visualizar_historico.py::test_listar_historico"
+        ],
+        "codigo.services.visualizar_notas_fiscais_service.x\u01c1VisualizarNotasFiscaisService\u01c1listar_notas_fiscais": [
+            "tests/integration/test_integration.py::test_listar_historico_pedidos_notas_fiscais",
+            "tests/functional/test_visualizar_notas_fiscais.py::test_visualizar_notas_fiscais",
+            "tests/integration/test_integration.py::test_listar_notas_fiscais"
+        ]
+    },
+    "duration_by_test": {
+        "tests/functional/test_editar_itens_cardapio.py::test_listar_cardapio_unidade": 9.61559999268502e-05,
+        "tests/functional/test_editar_itens_cardapio.py::test_listar_cardapio_central": 6.977900193305686e-05,
+        "tests/functional/test_editar_itens_cardapio.py::test_ativar_itens_cardapio_unidade": 7.523100066464394e-05,
+        "tests/functional/test_editar_itens_cardapio.py::test_ativar_itens_cardapio_unidade_lista_vazia": 6.595600279979408e-05,
+        "tests/functional/test_editar_itens_cardapio.py::test_ativar_itens_cardapio_unidade_ID_invalido": 5.848000000696629e-05,
+        "tests/functional/test_editar_itens_cardapio.py::test_remover_itens_cardapio_unidade": 8.025500574149191e-05,
+        "tests/functional/test_editar_itens_cardapio.py::test_remover_itens_cardapio_unidade_lista_vazia": 5.6728997151367366e-05,
+        "tests/functional/test_editar_itens_cardapio.py::test_remover_itens_cardapio_unidade_ID_invalido": 5.821199738420546e-05,
+        "tests/functional/test_pedidos_fila.py::test_listar_pedidos_ativos": 8.84180044522509e-05,
+        "tests/functional/test_realizar_pedido.py::test_reais_para_centavos_str": 5.173099634703249e-05,
+        "tests/functional/test_realizar_pedido.py::test_criar_pedido": 0.00010497299808776006,
+        "tests/functional/test_realizar_pedido.py::test_criar_pedido_resposta_vazia": 7.402100163744763e-05,
+        "tests/functional/test_realizar_pedido.py::test_atualizar_status_pedidos": 6.657699850620702e-05,
+        "tests/functional/test_visualizar_cardapio.py::test_view_menu": 7.888900290708989e-05,
+        "tests/functional/test_visualizar_cardapio.py::test_view_menu_preco_zerado": 7.614000060129911e-05,
+        "tests/functional/test_visualizar_historico.py::test_listar_historico": 0.00015698400238761678,
+        "tests/functional/test_visualizar_notas_fiscais.py::test_visualizar_notas_fiscais": 0.0001383299968438223,
+        "tests/integration/test_integration.py::test_criar_pedido_mostrar_fila_preparo": 0.00023456000053556636,
+        "tests/integration/test_integration.py::test_criar_pedido_com_numero_pedido_duplicado": 0.00023848899581935257,
+        "tests/integration/test_integration.py::test_criar_pedido_com_comidas_vazias": 0.0002093820003210567,
+        "tests/integration/test_integration.py::test_listar_historico_pedidos_notas_fiscais": 0.0002822230017045513,
+        "tests/integration/test_integration.py::test_ativar_todos_itens_cardapio_unidade": 0.0003818499972112477,
+        "tests/integration/test_integration.py::test_remover_todos_itens_cardapio_unidade": 0.0001688010015641339,
+        "tests/integration/test_integration.py::test_ativar_itens_repetidos_cardapio_unidade": 0.0001913820015033707,
+        "tests/integration/test_integration.py::test_remover_comida_especifica_cardapio_unidade": 0.00018165999790653586,
+        "tests/integration/test_integration.py::test_listar_historico": 0.00020009400031995028,
+        "tests/integration/test_integration.py::test_listar_notas_fiscais": 0.00020095500076422468
+    },
+    "stats_time": 0.5686060460000001
+}

@@ -1,0 +1,12 @@
+{
+    "exit_code_by_key": {
+        "services.pedidos_fila_service.x\u01c1PedidosFilaService\u01c1listar_pedidos_ativos__mutmut_1": null,
+        "services.pedidos_fila_service.x\u01c1PedidosFilaService\u01c1listar_pedidos_ativos__mutmut_2": null,
+        "services.pedidos_fila_service.x\u01c1PedidosFilaService\u01c1listar_pedidos_ativos__mutmut_3": null,
+        "services.pedidos_fila_service.x\u01c1PedidosFilaService\u01c1listar_pedidos_ativos__mutmut_4": null,
+        "services.pedidos_fila_service.x\u01c1PedidosFilaService\u01c1listar_pedidos_ativos__mutmut_5": null,
+        "services.pedidos_fila_service.x\u01c1PedidosFilaService\u01c1listar_pedidos_ativos__mutmut_6": null,
+        "services.pedidos_fila_service.x\u01c1PedidosFilaService\u01c1listar_pedidos_ativos__mutmut_7": null
+    },
+    "hash_by_function_name": {}
+}
