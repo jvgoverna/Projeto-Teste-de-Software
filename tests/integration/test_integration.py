@@ -59,7 +59,7 @@ def test_criar_pedido_com_numero_pedido_duplicado():
     pedidos_ativos = service_pedidos_fila.listar_pedidos_ativos()
     numeros = [p["NUMERO_PEDIDO"] for p in pedidos_ativos]
 
-    assert numeros.count(numero) >= 2   # o sistema deixou duplicar
+    assert numeros.count(numero) <= 1, "BUG: sistema permitiu duplicar NUMERO_PEDIDO."
 
 def test_criar_pedido_com_comidas_vazias():
     numero = "7777"
@@ -87,7 +87,10 @@ def test_criar_pedido_com_comidas_vazias():
     pedidos_ativos = service_pedidos_fila.listar_pedidos_ativos()
     numeros = [p["NUMERO_PEDIDO"] for p in pedidos_ativos]
 
-    assert numeros.count(numero) >= 2
+    assert numeros.count(numero) == 0, (
+        "BUG: o sistema está permitindo criar pedidos com a lista de COMIDAS vazia, "
+        "quando deveria rejeitar ou não persistir esse pedido."
+    )
 
 def test_listar_historico_pedidos_notas_fiscais():
 
