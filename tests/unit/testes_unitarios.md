@@ -1,4 +1,4 @@
-# 🧪 Testes Unitários – Burguer FEI
+# Testes Unitários – Burguer FEI
 
 | **ID** | **Título / Objetivo do Teste** | **Regra / Comportamento Validado** | **Pré-condição** | **Entradas / Operações** | **Resultado Esperado** |
 |--------|--------------------------------|------------------------------------|------------------|---------------------------|-------------------------|
@@ -42,7 +42,7 @@
 
 ---
 
-## ✅ Resumo Geral
+## Resumo Geral
 
 - **Todos os testes unitários executados foram aprovados.**
 - A suíte valida:
