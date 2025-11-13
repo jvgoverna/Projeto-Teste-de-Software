@@ -1,5 +1,3 @@
-# tests/unit/test_editar_itens_cardapio_service.py
-
 import pytest
 from unittest.mock import patch, Mock
 import requests
@@ -55,18 +53,23 @@ def test_listar_cardapio_unidade_propaga_http_error():
 
 # ---------- ativar_itens_cardapio_unidade ----------
 
-def test_ativar_itens_cardapio_unidade_ids_vazio_lanca_valueerror():
+@pytest.mark.parametrize(
+    "ids, mensagem_erro",
+    [
+        ([], "A lista de IDs não pode ser vazia"),
+        (["a", None, "xyz"], "Nenhum ID válido foi informado"),
+    ],
+)
+def test_ativar_itens_cardapio_unidade_validacoes_ids(ids, mensagem_erro):
+    """
+    Teste parametrizado para validar os cenários de erro de IDs:
+    - Lista vazia
+    - Todos os IDs inválidos
+    """
     service = EditarItensCardapioService()
 
-    with pytest.raises(ValueError, match="A lista de IDs não pode ser vazia"):
-        service.ativar_itens_cardapio_unidade([])
-
-
-def test_ativar_itens_cardapio_unidade_todos_ids_invalidos_lanca_valueerror():
-    service = EditarItensCardapioService()
-
-    with pytest.raises(ValueError, match="Nenhum ID válido foi informado"):
-        service.ativar_itens_cardapio_unidade(["a", None, "xyz"])
+    with pytest.raises(ValueError, match=mensagem_erro):
+        service.ativar_itens_cardapio_unidade(ids)
 
 
 def test_ativar_itens_cardapio_unidade_converte_ids_e_ignora_invalidos():
