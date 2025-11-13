@@ -1312,14 +1312,3 @@ def listar_notas_fiscais(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao consultar NOTAS_FISCAIS: {e}")
     
-
-
-
-# export-openapi.py
-import json
-from uvicorn.importer import import_from_string
-
-app = import_from_string("Server.BurgerFeiAPI:app")
-spec = app.openapi()
-with open("Server/openapi.json", "w", encoding="utf-8") as f:
-    json.dump(spec, f, indent=2)
